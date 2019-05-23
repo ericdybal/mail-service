@@ -1,0 +1,26 @@
+{
+  "root": true,
+  "extends": "eslint:recommended",
+  "env": {
+    "browser": true,
+    "jquery": true,
+    "node": true,
+    "es6": true,
+    "amd": true,
+    "mocha": true
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "no-extra-boolean-cast": [0],
+    "no-console": [0],
+    "linebreak-style": ["error", "unix"],
+    "no-empty":0,
+    "no-restricted-imports": [0]
+  }
+}

@@ -1,0 +1,17 @@
+# Use yarn.lock instead
+package-lock.json
+
+# Environment variables
+.env
+
+# Logs
+logs
+
+# Dependency directories
+node_modules
+
+# IDE
+mailservice.iml
+
+# build
+build/

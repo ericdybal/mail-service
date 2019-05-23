@@ -1,0 +1,16 @@
+{
+  "env": "development",
+  "port": 3003,
+  "mailProvider": {
+    "primary": {
+      "name": "mailGun",
+      "apiKey": "<ADD YOUR API KEY>"
+    },
+    "backup": {
+      "name": "sendGrid",
+      "apiKey": "<ADD YOUR API KEY>"
+    }
+  }
+}
+
+
