@@ -42,9 +42,9 @@ This service supports two APIs:
 Params: 
 
 from - email owner
-to - recipient list [comma separated list]
-cc - recipient list [comma separated list]
-bcc - recipient list [comma separated list]
+to - recipient list 
+cc - recipient list 
+bcc - recipient list 
 subject - email subject
 text - email content
 
