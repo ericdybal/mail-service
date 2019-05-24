@@ -19,33 +19,69 @@ npm install
 npm test 
 ```
 
-## Running in the Local Environment
+## Running the service
 
-To run the service in your local environment you will need API KEYs for both MailGun and SendGrid mail providers. Follow the links below to setup your own free accounts. 
+To run the service you will need API keys for MailGun and SendGrid mail providers. Follow the links below to setup your own free accounts. 
 
 * https://www.mailgun.com
 * https://www.sendgrid.com
 
 NOTE: Mail providers apply restrictions on the free accounts so make sure you read the documentation carefully to enable email sending. 
 
-Once you have the API keys, go to the ./config directory and add them to the profile file (development | production). To start the service run the following command:
+Once you have the API keys, go to the ./config directory and add them to the profile file (development | production). To start the service in the local environment run the following command:
 
 ```
 npm run-script dev
 ```
 
-## Testing the Service
+## Using the service
 
-To test the service, use the cURL command. Navigate to the ./src/test/smoke.sh file and modify the script with your own email addresses. The script will run through the most common usage scenarios.  
+This service supports two APIs:   
 
-NOTE: MailGun will require additional configuration to enable email relaying when using a free account.
-
-
-# Deployment
-
-The following command will start the service under the PM2 process manager control. See [http://pm2.keymetrics.io/](PM2) site for more information. 
+*  Sent Email
 
 ```
+from - email owner
+to - recipient list [comma separated list]
+cc - recipient list [comma separated list]
+bcc - recipient list [comma separated list]
+subject - email subject
+text - email content
+
+curl -d 'from=noreply@simple-mail-service.com&to=guest@example.com&subject=Hello&text=This service is awesome !' -X POST https://hambox.com.au/simple-mail-service/mail
+
+Returns:
+
+header[location] - unique id of the submitted email 
+
+```
+* Get Email Status 
+
+```
+id - unique email id
+
+curl -X GET https://hambox.com.au/simple-mail-service/mail/:id
+
+Returns:
+
+id - unique email id
+dateCreated - date email submitted
+dateSend - date email sent
+status - email status [PENDING - waiting to be delivered | COMPLETED - delivered | FAILED - failed to deliver] 
+errorCount - failed delivery count 
+message  - message content
+
+```
+
+NOTE: Refer to the ./src/test/smoke.sh file for more examples.  
+
+
+## Running in production
+
+The "start" command will run the service under the PM2 process manager. See [http://pm2.keymetrics.io/](PM2) website for more information. 
+
+```
+nom run-script build
 npm run-script start 
 ```
 
