@@ -31,8 +31,15 @@ export const updateById = async (updated) => {
   Promise.resolve(found)
 }
 
-export const clearAll = async () => {
-  queue = []
+export const clearAll = async (status) => {
+
+  if (status) {
+    queue = queue.filter(item => {
+      return item.status !== status
+    })
+  } else {
+    queue = []
+  }
 }
 
 export const count = async () => {

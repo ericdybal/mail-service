@@ -22,4 +22,12 @@ describe('InMemoryQueue', () => {
     await clearAll()
     expect(await count()).to.equal(0)
   })
+
+  it('testClearAll', async () => {
+    await push({id: 1, status: 'PENDING', errorCount: 0})
+    await push({id: 2, status: 'COMPLETED', errorCount: 0})
+    await clearAll('COMPLETED')
+    expect(await count()).to.equal(1)
+    expect(await findByStatus('PENDING')).to.have.property('length', 1)
+  })
 })

@@ -54,7 +54,7 @@ export const clearMailQueue = async () => {
   try {
     logger.debug('started clearMailQueue()')
 
-    await clearAll()
+    await clearAll('COMPLETED')
 
     logger.debug('finished clearMailQueue()')
   } catch (err) {
