@@ -43,7 +43,7 @@ NOTE: MailGun will require additional configuration to enable email relaying whe
 
 # Deployment
 
-Simple-Mail-Service support PM2 process manager. The following command will start the service is cluster mode. See PM2 for more information. 
+The following command will start the service under the PM2 process manager control. See [http://pm2.keymetrics.io/](PM2) site for more information. 
 
 ```
 npm run-script start 
