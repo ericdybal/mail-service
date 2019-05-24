@@ -33,7 +33,7 @@ router.post('/mail', validate(validator.sendEmail), (req, res, next) => {
 })
 
 router.get('/mail/:id', validate(validator.getMail), (req, res, next) => {
-  const id = parseInt(req.params.id)
+  const id = req.params.id
 
   findById(id).then(result => {
     res.status(result ? status.OK : status.NOT_FOUND)

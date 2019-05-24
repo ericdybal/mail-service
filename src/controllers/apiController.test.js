@@ -6,7 +6,7 @@ import { expect } from 'chai'
 
 describe('apiController', () => {
   const mailEntry = {
-    id: 1,
+    id: "1",
     status: 'PENDING',
     message: {
       from: 'test@example.com',
