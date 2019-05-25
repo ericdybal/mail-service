@@ -106,6 +106,16 @@ Online documentation available from https://hambox.com.au/simple-mail-service/
 
 NOTE: Refer to the ./src/test/smoke.sh file for more examples.  
 
+## Extending the service
+
+* Implementing a custom message store. 
+
+By default, the service uses with the in-memory message store. You can implement a custom message store by extending the following functions. 
+
+```
+(https://github.com/ericdybal/simple-mail-service/blob/master/src/repositories/messageStoreProvider.js)
+(https://github.com/ericdybal/simple-mail-service/blob/master/src/repositories/inMemoryMessageStore.js)
+```
 
 ## Running in production
 
@@ -120,6 +130,6 @@ npm run-script start
 
 - Swagger support (https://swagger.io/)
 - Add more email features, e.g. security, mime support (attachments, html), resilient email delivery mechanism, batching of emails 
-- Add persistent email storage e.g. backed up by REDIS or other NSQL database. 
+- Implement persistent message store e.g. backed up by REDIS or other NSQL database. 
 - Add plugin API for integration with different mail providers
 - Management API
