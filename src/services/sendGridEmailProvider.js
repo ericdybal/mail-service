@@ -1,13 +1,10 @@
 import axios from 'axios'
-import logger from '../config/logger'
 
 let providerConfig
 
 export const init = config => providerConfig = config
 
 export const sendEmail = async (message) => {
-  logger.debug(`Relaying email [${JSON.stringify(message)}] via ${providerConfig.name} [${providerConfig.type.toUpperCase()}]`)
-
   return axios({
     method: 'post',
     url: `https://api.sendgrid.com/v3/mail/send`,

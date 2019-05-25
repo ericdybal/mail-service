@@ -32,7 +32,6 @@ export const updateById = async (updated) => {
 }
 
 export const clearAll = async (status) => {
-
   if (status) {
     queue = queue.filter(item => {
       return item.status !== status

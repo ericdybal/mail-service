@@ -1,12 +1,12 @@
+import { expect } from 'chai'
 import status from 'http-status'
 import request from 'supertest'
 import app from '../app'
-import { push } from '../repositories/inMemoryMessageStore'
-import { expect } from 'chai'
+import { push } from '../repositories/inMemoryEmailStore'
 
 describe('apiController', () => {
   const mailEntry = {
-    id: "1",
+    id: '1',
     status: 'PENDING',
     message: {
       from: 'test@example.com',
@@ -62,7 +62,7 @@ describe('apiController', () => {
         expect(res.body.status).to.equal('PENDING')
         expect(res.body.errorCount).to.equal(0)
         expect(res.body.message.from).to.equal('guest@example.com')
-        expect(res.body.message.to).to.eql(['test1@example.com','test2@example.com','wrong_email_address'])
+        expect(res.body.message.to).to.eql(['test1@example.com', 'test2@example.com', 'wrong_email_address'])
         expect(res.body.message.cc).to.eql(['cc@example.com'])
         expect(res.body.message.bcc).to.eql(['bcc@example.com'])
         err ? done(err) : done()

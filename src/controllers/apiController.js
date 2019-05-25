@@ -1,15 +1,16 @@
 import express from 'express'
 import status from 'http-status'
 import uuid from 'uuid'
-import getMessageStore from '../repositories/messageStoreProvider'
+import getEmailStore from '../repositories/emailStoreProvider'
 import { validate } from '../util/validationUtils'
 import validator from './apiValidator'
+import config from '../config/config'
 
 const router = express.Router()
 
 router.post('/mail', validate(validator.sendEmail), (req, res, next) => {
 
-  const mailEntry = {
+  const emailEntry = {
     id: uuid(),
     dateCreated: new Date(),
     dateSent: null,
@@ -25,7 +26,17 @@ router.post('/mail', validate(validator.sendEmail), (req, res, next) => {
     }
   }
 
-  getMessageStore().push(mailEntry).then(result => {
+  getEmailStore().count()
+    .then(count => {
+      const size = config.get('emailStore.size')
+      if (count >= size) {
+        res.status(status.SERVICE_UNAVAILABLE)
+        res.send(count)
+      }
+    })
+    .catch(next)
+
+  getEmailStore().push(emailEntry).then(result => {
     res.status(status.CREATED)
     res.setHeader('Location', '/api/mail/' + result.id)
     res.send(result)
@@ -35,7 +46,7 @@ router.post('/mail', validate(validator.sendEmail), (req, res, next) => {
 router.get('/mail/:id', validate(validator.getMail), (req, res, next) => {
   const id = req.params.id
 
-  getMessageStore().findById(id).then(result => {
+  getEmailStore().findById(id).then(result => {
     res.status(result ? status.OK : status.NOT_FOUND)
       .send(result)
   }).catch(next)

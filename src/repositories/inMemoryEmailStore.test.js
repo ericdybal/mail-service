@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 import {
   push, clearAll, findById, findByStatus, updateById, count
-} from './inMemoryMessageStore'
+} from './inMemoryEmailStore'
 
-describe('InMemoryQueue', () => {
+describe('inMemoryEmailStore', () => {
   before(async () => {
     await clearAll()
   })

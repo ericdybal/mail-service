@@ -5,7 +5,7 @@ import appRoot from 'app-root-path'
 const config = convict({
   env: {
     doc: 'The application environment.',
-    format: ['local', 'development', 'test', 'production'],
+    format: ['development', 'test', 'production'],
     default: 'development',
     env: 'NODE_ENV'
   },
@@ -13,15 +13,37 @@ const config = convict({
     doc: 'The port to bind.',
     format: 'port',
     default: 3000,
-    env: 'PORT',
-    arg: 'port'
   },
-  messageStore: {
-    doc: 'The message store type.',
-    format: ['in-memory', 'persistent',],
-    default: 'in-memory',
+  email: {
+    retainPeriod: {
+      doc: 'Retention period of FAILED and COMPLETED emails.',
+      format: 'duration',
+      default: '1 day',
+    },
+    deliveryRetryCount: {
+      doc: 'The number of attempts to deliver a FAILED email.',
+      format: 'int',
+      default: 3,
+    },
+    deliveryRetryPeriod: {
+      doc: 'The elapsed time after an attempt will be made to deliver a FAILED email.',
+      format: 'duration',
+      default: '15 mins',
+    },
   },
-  mailProvider: [{
+  emailStore: {
+    type: {
+      doc: 'The email store type.',
+      format: ['in-memory', 'persistent'],
+      default: 'in-memory',
+    },
+    size: {
+      doc: 'The number of queued emails.',
+      format: 'int',
+      default: 10000,
+    }
+  },
+  emailProvider: [{
     type: {
       doc: 'mailProvider type',
       format: ['primary', 'backup'],

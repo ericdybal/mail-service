@@ -1,13 +1,10 @@
 import axios from 'axios'
-import logger from '../config/logger'
 
-let providerConfig;
+let providerConfig
 
-export const init = config => providerConfig = config;
+export const init = config => providerConfig = config
 
 export const sendEmail = async (message) => {
-  logger.debug(`Relaying email [${JSON.stringify(message)}] via ${providerConfig.name} [${providerConfig.type.toUpperCase()}]`)
-
   return axios({
     method: 'post',
     url: `https://api.mailgun.net/v3/sandbox3900691a3a094d2c861f477ec5acd14f.mailgun.org/messages`,

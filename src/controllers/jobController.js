@@ -1,71 +1,85 @@
+import moment from 'moment'
 import logger from '../config/logger'
-import getMessageStore from '../repositories/messageStoreProvider'
-import { getPrimaryMailProvider, getBackupMailProvider } from '../services/mailProvider'
+import config from '../config/config'
+import getEmailStore from '../repositories/emailStoreProvider'
+import { getPrimaryEmailProvider, getBackupEmailProvider } from '../services/emailProvider'
 
-export const sendMail = async () => {
+const MAX_DELIVERY_SIZE = 10
 
-  const MAX_FETCH_COUNT = 10
+export const deliverEmails = async () => {
 
   try {
-    logger.debug('started sendMail()')
+    logger.debug('started deliverEmails()')
 
-    const messageStore = getMessageStore()
-    const primaryMailProvider = getPrimaryMailProvider()
-    const backupMailProvider = getBackupMailProvider()
+    const emailStore = getEmailStore()
+    const primaryEmailProvider = getPrimaryEmailProvider()
+    const backupEmailProvider = getBackupEmailProvider()
 
-    const retryFailed = (await messageStore.findByStatus('FAILED')).filter(item => item.errorCount < 3)
-    const pending = await messageStore.findByStatus('PENDING')
+    const failedEmailsToRetry = await getFailedEmailsToRetry(emailStore)
+    const pendingEmails = await getPendingEmails(emailStore)
+    const allEmails = [...pendingEmails, ...failedEmailsToRetry]
 
-    const all = [...retryFailed.slice(0, Math.min(MAX_FETCH_COUNT, retryFailed.length)),
-      ...pending.slice(0, Math.min(MAX_FETCH_COUNT, pending.length))]
+    logger.debug(`Found ${allEmails.length} emails(s) to deliver`)
 
-    logger.debug(`Found ${all.length} email(s) to send`)
-
-    all.map(async item => {
-
-      primaryMailProvider.sendEmail(item.message)
-        .then(async result => {
-
-          await messageStore.updateById({...item, status: 'COMPLETED', dateSent: new Date()})
-
-        }).catch(err => {
-
-        logger.debug(`Failed to relay email via the PRIMARY mailProvider [${err}]`)
-
-        backupMailProvider.sendEmail(item.message)
-          .then(async result => {
-
-            await messageStore.updateById({...item, status: 'COMPLETED', dateSent: new Date()})
-
-          }).catch(async err => {
-
-          logger.debug(`Failed to relay email via the BACKUP mailProvider [${err}]`)
-          await messageStore.updateById({...item, status: 'FAILED', errorCount: item.errorCount + 1})
+    await Promise.all(allEmails.map(async item => {
+      primaryEmailProvider.sendEmail(item.message)
+        .then(async () => {
+          logger.debug(`Successfully delivered email [${item.id}] via (PRIMARY)`)
+          await emailStore.updateById({...item, status: 'COMPLETED', dateSent: new Date()})
         })
-      })
+        .catch(() => {
+          backupEmailProvider.sendEmail(item.message)
+            .then(async () => {
+              logger.debug(`Successfully delivered email [${item.id}] via (BACKUP)`)
+              await emailStore.updateById({...item, status: 'COMPLETED', dateSent: new Date()})
+            }).catch(async (err) => {
+            logger.debug(`Failed to deliver email [${item.id}] [${err}]`)
+            await emailStore.updateById({...item, status: 'FAILED', errorCount: item.errorCount + 1})
+          })
+        })
+    }))
+      .catch(err => logger.debug(err))
+
+    logger.debug('finished deliverEmails()')
+
+  } catch (err) {
+    logger.error(`${err.stack}`)
+  }
+}
+
+export const clearEmailStore = async () => {
+
+  try {
+    logger.debug('started clearEmailStore()')
+
+    await getEmailStore().clearAll('COMPLETED')
+
+    logger.debug('finished clearEmailStore()')
+  } catch (err) {
+    logger.error(`${err.stack}`)
+  }
+}
+
+const getFailedEmailsToRetry = async (emailStore) => {
+  const deliveryRetryCount = config.get('email.deliveryRetryCount')
+  const deliveryRetryPeriod = config.get('email.deliveryRetryPeriod')
+  const duration = moment.duration(deliveryRetryPeriod)
+  const now = moment.now()
+
+  const failed = (await emailStore.findByStatus('FAILED'))
+    .filter(item => item.errorCount <= deliveryRetryCount)
+    .filter(item => {
+      const elapsedTime = new moment(item.dateCreated).add(duration.asMilliseconds() * item.errorCount)
+      return elapsedTime.isBefore(now)
     })
 
-    logger.debug('finished sendMail()')
-
-  } catch (err) {
-    logger.error(`${err.stack}`)
-  }
+  return failed.slice(0, Math.min(MAX_DELIVERY_SIZE, failed.length))
 }
 
-export const clearMailQueue = async () => {
-
-  try {
-    logger.debug('started clearMailQueue()')
-
-    await getMessageStore().clearAll('COMPLETED')
-
-    logger.debug('finished clearMailQueue()')
-  } catch (err) {
-    logger.error(`${err.stack}`)
-  }
+const getPendingEmails = async (emailStore) => {
+  const pending = (await emailStore.findByStatus('PENDING'))
+  return pending.slice(0, Math.min(MAX_DELIVERY_SIZE, pending.length))
 }
-
-
 
 
 

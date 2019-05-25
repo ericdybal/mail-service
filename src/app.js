@@ -6,7 +6,7 @@ import logger from './config/logger'
 import { registerJobs, shutdownJobs } from './config/jobs'
 
 
-logger.info('############# mail-service starting ############')
+logger.info('############# simple mail service starting ############')
 
 if ('test' !== config.get('env')) {
   // running with PM2
@@ -22,11 +22,11 @@ if ('test' !== config.get('env')) {
 }
 
 app.listen(config.get('port'), () => {
-  logger.info(`mail-service running on port [${config.get('port')}], profile [${config.get('env')}]`)
+  logger.info(`service running on port [${config.get('port')}], profile [${config.get('env')}]`)
 })
 
 onShutdown(async () => {
-  logger.info('mail-service shutting down...')
+  logger.info('simple mail service shutting down...')
   shutdownJobs()
 })
 

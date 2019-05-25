@@ -1,8 +1,16 @@
 {
   "env": "test",
   "port": 3002,
-  "messageStore" : "in-memory",
-  "mailProvider": [
+  "email": {
+    "retainPeriod": "1 day",
+    "deliveryRetryCount": 3,
+    "deliveryRetryPeriod": "15 minutes"
+  },
+  "emailStore": {
+    "type": "in-memory",
+    "size": 10000
+  },
+  "emailProvider": [
     {
       "type": "primary",
       "name": "mailGun",
