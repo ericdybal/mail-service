@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import {
   push, clearAll, findById, findByStatus, updateById, count
-} from './InMemoryQueue'
+} from './inMemoryMessageStore'
 
 describe('InMemoryQueue', () => {
   before(async () => {

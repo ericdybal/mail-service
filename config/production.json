@@ -1,6 +1,7 @@
 {
   "env": "production",
-  "port": 3001,
+  "port": 3004,
+  "messageStore" : "in-memory",
   "mailProvider": {
     "primary": {
       "name": "mailGun",

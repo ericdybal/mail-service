@@ -1,7 +1,7 @@
 import status from 'http-status'
 import request from 'supertest'
 import app from '../app'
-import { push } from '../repositories/InMemoryQueue'
+import { push } from '../repositories/inMemoryMessageStore'
 import { expect } from 'chai'
 
 describe('apiController', () => {

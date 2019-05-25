@@ -1,7 +1,7 @@
 import sinon from 'sinon'
 import { expect } from 'chai'
 import { sendMail } from './jobController'
-import { findById, push, clearAll } from '../repositories/InMemoryQueue'
+import { findById, push, clearAll } from '../repositories/inMemoryMessageStore'
 import * as primary from '../services/mailGunProvider'
 import * as backup from '../services/sendGridProvider'
 

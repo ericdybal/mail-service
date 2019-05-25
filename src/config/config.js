@@ -16,6 +16,11 @@ const config = convict({
     env: 'PORT',
     arg: 'port'
   },
+  messageStore: {
+    doc: 'The message store type.',
+    format: ['in-memory', 'persistent',],
+    default: 'in-memory',
+  },
   mailProvider: {
     primary: {
       name: {
@@ -41,7 +46,7 @@ const config = convict({
         default: ''
       },
     }
-  }
+  },
 })
 
 // allow override via command line

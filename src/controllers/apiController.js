@@ -1,7 +1,7 @@
 import express from 'express'
 import status from 'http-status'
 import uuid from 'uuid'
-import { push, findById } from '../repositories/InMemoryQueue'
+import getMessageStore from '../repositories/messageStoreProvider'
 import { validate } from '../util/validationUtils'
 import validator from './apiValidator'
 
@@ -25,7 +25,7 @@ router.post('/mail', validate(validator.sendEmail), (req, res, next) => {
     }
   }
 
-  push(mailEntry).then(result => {
+  getMessageStore().push(mailEntry).then(result => {
     res.status(status.CREATED)
     res.setHeader('Location', '/api/mail/' + result.id)
     res.send(result)
@@ -35,7 +35,7 @@ router.post('/mail', validate(validator.sendEmail), (req, res, next) => {
 router.get('/mail/:id', validate(validator.getMail), (req, res, next) => {
   const id = req.params.id
 
-  findById(id).then(result => {
+  getMessageStore().findById(id).then(result => {
     res.status(result ? status.OK : status.NOT_FOUND)
       .send(result)
   }).catch(next)
