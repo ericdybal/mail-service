@@ -1,7 +1,6 @@
 import logger from '../config/logger'
 import getMessageStore from '../repositories/messageStoreProvider'
-import * as primary from '../services/mailGunProvider'
-import * as backup from '../services/sendGridProvider'
+import { getPrimaryMailProvider, getBackupMailProvider } from '../services/mailProvider'
 
 export const sendMail = async () => {
 
@@ -11,6 +10,8 @@ export const sendMail = async () => {
     logger.debug('started sendMail()')
 
     const messageStore = getMessageStore()
+    const primaryMailProvider = getPrimaryMailProvider()
+    const backupMailProvider = getBackupMailProvider()
 
     const retryFailed = (await messageStore.findByStatus('FAILED')).filter(item => item.errorCount < 3)
     const pending = await messageStore.findByStatus('PENDING')
@@ -22,7 +23,7 @@ export const sendMail = async () => {
 
     all.map(async item => {
 
-      primary.sendEmail(item.message)
+      primaryMailProvider.sendEmail(item.message)
         .then(async result => {
 
           await messageStore.updateById({...item, status: 'COMPLETED', dateSent: new Date()})
@@ -31,7 +32,7 @@ export const sendMail = async () => {
 
         logger.debug(`Failed to relay email via the PRIMARY mailProvider [${err}]`)
 
-        backup.sendEmail(item.message)
+        backupMailProvider.sendEmail(item.message)
           .then(async result => {
 
             await messageStore.updateById({...item, status: 'COMPLETED', dateSent: new Date()})

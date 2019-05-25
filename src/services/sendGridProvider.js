@@ -1,9 +1,12 @@
 import axios from 'axios'
 import logger from '../config/logger'
-import config from '../config/config'
+
+let providerConfig
+
+export const init = config => providerConfig = config
 
 export const sendEmail = async (message) => {
-  logger.debug(`Relaying email [${JSON.stringify(message)}] via ${config.get('mailProvider.backup.name')}`)
+  logger.debug(`Relaying email [${JSON.stringify(message)}] via ${providerConfig.name} [${providerConfig.type.toUpperCase()}]`)
 
   return axios({
     method: 'post',
@@ -11,7 +14,7 @@ export const sendEmail = async (message) => {
     data: JSON.stringify(createPayload(message)),
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${config.get('mailProvider.backup.apiKey')}`
+      'Authorization': `Bearer ${providerConfig.apiKey}`
     }
   })
 }

@@ -8,12 +8,12 @@ import config from '../config/config'
 describe('messageStoreProvider', () => {
   const configStub = sinon.stub(config, 'get')
 
-  it('in-memory message store', () => {
+  it('should return in-memory message store', () => {
     configStub.returns('in-memory')
     expect(getMessageStore()).to.equal(inMemoryMessageStore)
   })
 
-  it('persistent message store', () => {
+  it('should return persistent message store', () => {
     configStub.returns('persistent')
     expect(getMessageStore()).to.equal(persistentMessageStore)
   })

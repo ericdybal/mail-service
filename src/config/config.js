@@ -21,32 +21,23 @@ const config = convict({
     format: ['in-memory', 'persistent',],
     default: 'in-memory',
   },
-  mailProvider: {
-    primary: {
-      name: {
-        doc: 'Primary mailProvider',
-        format: String,
-        default: ''
-      },
-      apiKey: {
-        doc: 'Api Key',
-        format: String,
-        default: ''
-      },
+  mailProvider: [{
+    type: {
+      doc: 'mailProvider type',
+      format: ['primary', 'backup'],
+      default: 'primary'
     },
-    backup: {
-      name: {
-        doc: 'Backup mailProvider',
-        format: String,
-        default: ''
-      },
-      apiKey: {
-        doc: 'Api Key',
-        format: String,
-        default: ''
-      },
-    }
-  },
+    name: {
+      doc: 'mailProvider name',
+      format: String,
+      default: ''
+    },
+    apiKey: {
+      doc: 'Api Key',
+      format: String,
+      default: ''
+    },
+  }],
 })
 
 // allow override via command line

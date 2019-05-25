@@ -1,17 +1,19 @@
 {
   "env": "production",
   "port": 3004,
-  "messageStore" : "in-memory",
-  "mailProvider": {
-    "primary": {
+  "messageStore": "in-memory",
+  "mailProvider": [
+    {
+      "type": "primary",
       "name": "mailGun",
-      "apiKey": "<ADD YOUR API KEY>"
+      "apiKey": "<YOUR API KEY>"
     },
-    "backup": {
+    {
+      "type": "backup",
       "name": "sendGrid",
-      "apiKey": "<ADD YOUR API KEY>"
+      "apiKey": "<YOUR API KEY>"
     }
-  }
+  ]
 }
 
 
