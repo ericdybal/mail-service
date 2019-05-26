@@ -8,7 +8,7 @@ A simple and lightweight web service written using NodeJS that provides email fu
 * **Backup Email Provider**: Automatic failover to the BACKUP email provider.
 * **MailGun and SendGrid Integration**: Out of the box support for the popular **MailGun** and **SendGrid** email providers.  
 * **Resilient Email Delivery**: Undelivered emails are cached on the server while a number of attempts is made to redeliver the emails.
-* **Extension Mechanism**: An extension API to integrate with a custom email provider. 
+* **Extension API**: Extension API to integrate with other email providers. 
 * **Simple Configuration**: Essy to use and understand JSON based configuration.  
 
 
@@ -192,7 +192,7 @@ NOTE: Refer to the ./src/test/smoke.sh file for more examples.
 
 ### Custom email provider
 
-The following example shows how to implement a custom email provider. To register a custom email provider with the service, refer to the **emailProvider.js**. 
+The following example shows how to implement a custom email provider. To register a custom email provider with the service, refer to **emailProvider.js**. 
 
 ```
 let providerConfig
@@ -221,7 +221,7 @@ export const sendEmail = async (message) => {
 
 ### Custom email store 
 
-By default, the service ships with the in-memory email store. You can implement a custom email store by implementing the following interface and registering the implementation with the store provider factory. See the **emailStoreProvider.js** file for an example of how to do this. 
+By default, the service ships with the in-memory email store. You can implement a custom email store by implementing the following interface and registering the implementation with the store provider factory. Refer to **emailStoreProvider.js**. 
 
 ```
 export const push = async (item) => {
