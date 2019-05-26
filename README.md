@@ -1,6 +1,14 @@
 # Simple Mail Service
 
-A simple and light web service written using NodeJS that provides email service functionality via the RESTful API. Perfect for projects that require basic email functionality accessible via the RESTful API. 
+A simple and lightweight web service written using NodeJS that provides email functionality accessible via the RESTful API.
+
+## Features
+* **Simple API**: A minimalistic API composed of only two endpoints (POST email | GET email delivery status).
+* **Backup Email Providers**: Support for multiple email providers (PRIMARY|BACKUP).
+* **Integration with Popular Email Providers**: Out of the box support for **MailGun** and **SendGrid** email providers.  
+* **Resilient Email Delivery**: Emails are cached on the server for a period of time and a number of attempts is made to redeliver the emails.
+* **Extension Mechanism**: A simple extension mechanism to integrate with custom email providers. 
+* **Simple Configuration**:JSON based configuration.  
 
 ## Requirements
 
@@ -15,8 +23,7 @@ A simple and light web service written using NodeJS that provides email service 
 git clone https://github.com/ericdybal/simple-mail-service
 cd simple-mail-service
 
-npm install
-npm test 
+npm install 
 ```
 
 ## Running the service
@@ -77,7 +84,7 @@ Online documentation available from https://hambox.com.au/simple-mail-service/
            * value    - field value
 
 
-      [Get Email Status]
+      [Get Email Delivery Status]
 
       GET /mail HTTP/1.1 
       Host: https://hambox.com.au/simple-mail-service
@@ -108,28 +115,79 @@ NOTE: Refer to the ./src/test/smoke.sh file for more examples.
 
 ## Extending the service
 
-* Implementing a custom message store. 
+* **Custom email provider**
 
-By default, the service uses with the in-memory message store. You can implement a custom message store by extending the following functions. 
+The following shows how to implement a custom email provider. 
 
 ```
-(https://github.com/ericdybal/simple-mail-service/blob/master/src/repositories/messageStoreProvider.js)
-(https://github.com/ericdybal/simple-mail-service/blob/master/src/repositories/inMemoryMessageStore.js)
+let providerConfig
+
+export const init = config => providerConfig = config
+
+export const sendEmail = async (message) => {
+  return axios({
+    method: 'post',
+    url: `https://api.mailgun.net/v3/sandbox3900691a3a094d2c861f477ec5acd14f.mailgun.org/messages`,
+    auth: {
+      username: 'api',
+      password: providerConfig.apiKey,
+    },
+    params: {
+      from: message.from,
+      to: message.to.join(','),
+      cc: message.cc ? message.cc.join(',') : undefined,
+      bcc: message.bcc ? message.bcc.join(',') : undefined,
+      subject: message.subject,
+      text: message.text
+    },
+  })
+}
 ```
+
+* **Custom email store** 
+
+By default, the service ships with the in-memory email store. You can implement a custom email store by implementing the following methods and registerinfg the  store with the email store provider factory. Refer to **emailStoreProvider.js** for more information. 
+
+```
+export const push = async (item) => {
+  return Promise.reject(new Error('Not implemented!'))
+}
+
+export const findByStatus = async (status) => {
+  return Promise.reject(new Error('Not implemented!'))
+}
+
+export const findById = async (id) => {
+  return Promise.reject(new Error('Not implemented!'))
+}
+
+export const updateById = async (updated) => {
+  return Promise.reject(new Error('Not implemented!'))
+}
+
+export const clearAll = async (status) => {
+  return Promise.reject(new Error('Not implemented!'))
+}
+
+export const count = async () => {
+  return Promise.reject(new Error('Not implemented!'))
+}
+```
+
 
 ## Running in production
 
-The "start" command will start the service under the PM2 process manager. See [http://pm2.keymetrics.io/](PM2) website for more information. 
+Running the service in production is done via the PM2 process manager. See [http://pm2.keymetrics.io/](PM2) website for more information. 
 
 ```
-nom run-script build (first complile the source)
 npm run-script start 
 ```
+
+**NOTE**: Currently the production deployment is limited to single PM2 node due to the in-memory email store. 
 
 ## TODOs
 
 - Swagger support (https://swagger.io/)
-- Add more email features, e.g. security, mime support (attachments, html), resilient email delivery mechanism, batching of emails 
-- Implement persistent message store e.g. backed up by REDIS or other NSQL database. 
-- Add plugin API for integration with different mail providers
+- Add more email features, e.g. security, mime support (attachments, html), batching of emails 
+- Implement persistent message store e.g. backed up by REDIS or other NSQL database
 - Management API
