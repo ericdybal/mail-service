@@ -2,13 +2,21 @@
 
 A simple and lightweight web service written using NodeJS that provides email functionality accessible via the RESTful API.
 
+
 ## Features
 * **Simple API**: A minimalistic API composed of only two endpoints (POST email | GET email delivery status).
-* **Backup Email Providers**: Support for multiple email providers (PRIMARY|BACKUP).
-* **Integration with Popular Email Providers**: Out of the box support for **MailGun** and **SendGrid** email providers.  
-* **Resilient Email Delivery**: Emails are cached on the server for a period of time and a number of attempts is made to redeliver the emails.
-* **Extension Mechanism**: A simple extension mechanism to integrate with custom email providers. 
-* **Simple Configuration**:JSON based configuration.  
+* **Backup Email Provider**: Automatic failover to the BACKUP email provider.
+* **MailGun and SendGrid Integration**: Out of the box support for the popular **MailGun** and **SendGrid** email providers.  
+* **Resilient Email Delivery**: Undelivered emails are cached on the server while a number of attempts is made to redeliver the emails.
+* **Extension Mechanism**: An extension API to integrate with a custom email provider. 
+* **Simple Configuration**: Essy to use and understand JSON based configuration.  
+
+
+## Use Cases
+
+* **Development and Testing**: Great for development and testing teams that work the with email intensive applications or mailing campaings. This service ensures that emails don't reach the intended recipients during development and testing.  
+* **Internal Email Gateway**: The service can be used behind the coorporate firewall as a simple outgoing email gateway. 
+
 
 ## Requirements
 
@@ -115,9 +123,9 @@ NOTE: Refer to the ./src/test/smoke.sh file for more examples.
 
 ## Extending the service
 
-* **Custom email provider**
+### Custom email provider
 
-The following shows how to implement a custom email provider. 
+The following example shows how to implement a custom email provider. To register a custom email provider with the service, refer to the **emailProvider.js**. 
 
 ```
 let providerConfig
@@ -144,9 +152,9 @@ export const sendEmail = async (message) => {
 }
 ```
 
-* **Custom email store** 
+### Custom email store 
 
-By default, the service ships with the in-memory email store. You can implement a custom email store by implementing the following methods and registerinfg the  store with the email store provider factory. Refer to **emailStoreProvider.js** for more information. 
+By default, the service ships with the in-memory email store. You can implement a custom email store by implementing the following interface and registering the implementation with the store provider factory. See the **emailStoreProvider.js** file for an example of how to do this. 
 
 ```
 export const push = async (item) => {
@@ -187,7 +195,8 @@ npm run-script start
 
 ## TODOs
 
-- Swagger support (https://swagger.io/)
-- Add more email features, e.g. security, mime support (attachments, html), batching of emails 
-- Implement persistent message store e.g. backed up by REDIS or other NSQL database
-- Management API
+* Swagger support (https://swagger.io/)
+* Add more email features, e.g. security, mime support (attachments, html), batching of emails 
+* Implement persistent message store e.g. backed up by REDIS or other NSQL database
+* Docker integration 
+* Management API
