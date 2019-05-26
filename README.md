@@ -46,9 +46,9 @@ By default the service requires API keys for the MailGun and SendGrid email prov
 
 ```
 const config = convict({
-  env: {
+ env: {
     doc: 'The application environment.',
-    format: ['development', 'test', 'production'],
+    format: ['development', 'test', 'production', 'log'],
     default: 'development',
     env: 'NODE_ENV'
   },
