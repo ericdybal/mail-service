@@ -5,7 +5,7 @@ import appRoot from 'app-root-path'
 const config = convict({
   env: {
     doc: 'The application environment.',
-    format: ['development', 'test', 'production'],
+    format: ['development', 'test', 'production', 'log'],
     default: 'development',
     env: 'NODE_ENV'
   },

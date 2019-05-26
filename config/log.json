@@ -1,0 +1,27 @@
+{
+  "env": "log",
+  "port": 3005,
+  "email": {
+    "retainPeriod": "1 day",
+    "deliveryRetryCount": 3,
+    "deliveryRetryPeriod": "15 minutes"
+  },
+  "emailStore": {
+    "type": "in-memory",
+    "size": 10000
+  },
+  "emailProvider": [
+    {
+      "type": "primary",
+      "name": "log",
+      "apiKey": "<YOUR API KEY>"
+    },
+    {
+      "type": "backup",
+      "name": "log",
+      "apiKey": "<YOUR API KEY>"
+    }
+  ]
+}
+
+

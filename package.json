@@ -1,16 +1,20 @@
 {
-  "name": "mailservice",
+  "name": "simple-mail-service",
   "version": "1.0.0",
   "description": "Simple mail service",
   "main": "src/app.js",
   "scripts": {
     "start": "NODE_ENV=production pm2 start ./build/dist/app.js -i 1 --name simple-mail-service",
     "dev": "NODE_ENV=development ./node_modules/.bin/babel-node $NODE_DEBUG_OPTION ./src/app.js",
+    "log": "NODE_ENV=log ./node_modules/.bin/babel-node ./src/app.js",
     "test": "NODE_ENV=test mocha $NODE_DEBUG_OPTION --require @babel/register --timeout 50000 --exit ./src/*/*.test.js",
     "build": "./node_modules/.bin/babel ./src --out-dir ./build/dist --source-maps"
   },
   "keywords": [
-    "mail"
+    "email",
+    "nodejs",
+    "express",
+    "restful-api"
   ],
   "author": "Eric Dybal",
   "license": "ISC",

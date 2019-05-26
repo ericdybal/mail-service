@@ -4,7 +4,7 @@ import path from 'path'
 
 const options = {
   combined: {
-    level: 'info',
+    level: 'debug',
     filename: `${appRootPath.path}/logs/combined.log`,
     handleExceptions: true,
     json: true,
