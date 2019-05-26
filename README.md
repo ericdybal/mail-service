@@ -8,7 +8,7 @@ A simple and lightweight web service written using NodeJS that provides email fu
 * **Backup Email Provider**: Automatic failover to the BACKUP email provider.
 * **MailGun and SendGrid Integration**: Out of the box support for the popular **MailGun** and **SendGrid** email providers.  
 * **Resilient Email Delivery**: Undelivered emails are cached on the server while a number of attempts is made to redeliver the emails.
-* **Extension API**: Extension API to integrate with other email providers. 
+* **Extension API**: An extension API to integrate with other email providers. 
 * **Simple Configuration**: Essy to use and understand JSON based configuration.  
 
 
