@@ -14,7 +14,7 @@ A simple and lightweight web service written using NodeJS that provides email fu
 
 ## Use Cases
 
-* **Development and Testing**: Great for development and testing teams that work the with email intensive applications or mailing campaings. This service ensures that emails don't reach the intended recipients during development and testing.  
+* **Development and Testing**: Great for development and testing teams that work with the email intensive applications or mailing campaings. This service can be configured to short-circuit all outgoing emails to ensure that they don't reach their intended recipients during the development or testing phase of the project.  
 * **Internal Email Gateway**: The service can be used behind the coorporate firewall as a simple outgoing email gateway. 
 
 
@@ -34,14 +34,81 @@ cd simple-mail-service
 npm install 
 ```
 
-## Running the service
+## Configuration Options
 
-To run the service you will need API keys for the MailGun and SendGrid mail providers. Follow the links below to setup your own free accounts. 
+By default the service requires API keys for the MailGun and SendGrid email providers. Follow the links below to setup your own free accounts. 
 
 * https://www.mailgun.com
 * https://www.sendgrid.com
 
-Add the API keys to the profile files in the  ./config/ directory. To start the service in the local environment run the following command:
+
+### Supported configuration options:
+
+```
+const config = convict({
+  env: {
+    doc: 'The application environment.',
+    format: ['development', 'test', 'production'],
+    default: 'development',
+    env: 'NODE_ENV'
+  },
+  port: {
+    doc: 'The port to bind.',
+    format: 'port',
+    default: 3000,
+  },
+  email: {
+    retainPeriod: {
+      doc: 'Retention period of FAILED and COMPLETED emails.',
+      format: 'duration',
+      default: '1 day',
+    },
+    deliveryRetryCount: {
+      doc: 'The number of attempts to deliver a FAILED email.',
+      format: 'int',
+      default: 3,
+    },
+    deliveryRetryPeriod: {
+      doc: 'The elapsed time after an attempt will be made to deliver a FAILED email.',
+      format: 'duration',
+      default: '15 mins',
+    },
+  },
+  emailStore: {
+    type: {
+      doc: 'The email store type.',
+      format: ['in-memory', 'persistent'],
+      default: 'in-memory',
+    },
+    size: {
+      doc: 'The number of queued emails.',
+      format: 'int',
+      default: 10000,
+    }
+  },
+  emailProvider: [{
+    type: {
+      doc: 'mailProvider type',
+      format: ['primary', 'backup'],
+      default: 'primary'
+    },
+    name: {
+      doc: 'mailProvider name',
+      format: String,
+      default: ''
+    },
+    apiKey: {
+      doc: 'Api Key',
+      format: String,
+      default: ''
+    },
+  }],
+})
+```
+
+## Running the service
+
+To start the service in the local environment run the following command:
 
 ```
 npm run-script dev
