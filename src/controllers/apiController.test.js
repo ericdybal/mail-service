@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import status from 'http-status';
 import request from 'supertest';
 import app from '../config/express';
-import { push } from '../repositories/inMemoryEmailStore';
+import { push, clearAll } from '../repositories/inMemoryEmailStore';
 
 describe('apiController', () => {
   const mailEntry = {
@@ -11,6 +11,8 @@ describe('apiController', () => {
     message: {
       from: 'test@example.com',
       to: 'guest@example.com',
+      subject: 'Hi',
+      text: 'Hello!',
     },
   };
 
@@ -18,7 +20,7 @@ describe('apiController', () => {
     await push(mailEntry);
   });
 
-  it('should return an email', done => {
+  it('should return email delivery status', done => {
     request(app)
       .get('/api/mail/1')
       .set('Accept', 'application/json')
@@ -32,7 +34,7 @@ describe('apiController', () => {
 
   it('should return email not found', done => {
     request(app)
-      .get('/api/mail/99')
+      .get('/api/mail/99999')
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(status.NOT_FOUND)
@@ -73,7 +75,7 @@ describe('apiController', () => {
       });
   });
 
-  it('should fail with a validation error', done => {
+  it('should fail with the validation error', done => {
     request(app)
       .post('/api/mail')
       .send({ from: 'not_an_email_address,not_an_email_address2' })
@@ -100,5 +102,32 @@ describe('apiController', () => {
         });
         err ? done(err) : done();
       });
+  });
+
+  describe('Validate maximum queue size', () => {
+    before(async () => {
+      for (let i = 1; i < 110; i++) {
+        await push(mailEntry);
+      }
+    });
+
+    after(async () => {
+      await clearAll();
+    });
+
+    it('should reject email if the queue size is exceeded', done => {
+      request(app)
+        .post('/api/mail')
+        .send({
+          from: 'guest@example.com',
+          to: 'test@example.com',
+        })
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /text\/plain/)
+        .expect(status.SERVICE_UNAVAILABLE)
+        .end((err) => {
+          err ? done(err) : done();
+        });
+    });
   });
 });

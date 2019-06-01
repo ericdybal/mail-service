@@ -30,18 +30,17 @@ router.post('/mail', validate(validator.sendEmail), (req, res, next) => {
     .then(count => {
       const size = config.get('emailStore.size');
       if (count >= size) {
-        res.status(status.SERVICE_UNAVAILABLE);
-        res.send(count);
+        res.sendStatus(status.SERVICE_UNAVAILABLE);
+      } else {
+        getEmailStore()
+          .push(emailEntry)
+          .then(result => {
+            res.status(status.CREATED);
+            res.setHeader('Location', '/api/mail/' + result.id);
+            res.send(result);
+          })
+          .catch(next);
       }
-    })
-    .catch(next);
-
-  getEmailStore()
-    .push(emailEntry)
-    .then(result => {
-      res.status(status.CREATED);
-      res.setHeader('Location', '/api/mail/' + result.id);
-      res.send(result);
     })
     .catch(next);
 });
