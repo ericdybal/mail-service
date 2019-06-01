@@ -29,18 +29,6 @@ describe('server.js', () => {
 
       mock.verify()
     })
-
-    // todo: test node-cleanup
-    // it('should run shutdownJobs() on shutdown', () => {
-    //   const mock = sandbox.mock(jobs)
-    //     .expects('shutdownJobs')
-    //     .once()
-    //     .returns(() => {})
-    //
-    //   start()
-    //
-    //   mock.verify()
-    // })
   })
 
   describe('PM2 Deployment', () => {
@@ -74,4 +62,17 @@ describe('server.js', () => {
       mock.verify()
     })
   })
+
+  // todo: test node-cleanup
+  // it('should run shutdownJobs() on shutdown', () => {
+  //   const mock = sandbox.mock(jobs)
+  //     .expects('shutdownJobs')
+  //     .once()
+  //     .returns(() => {})
+  //
+  //   start()
+  //
+  //   mock.verify()
+  // })
+
 })

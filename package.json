@@ -6,8 +6,9 @@
   "scripts": {
     "start": "NODE_ENV=production pm2 start ./build/dist/app.js -i 1 --name simple-mail-service",
     "dev": "NODE_ENV=development ./node_modules/.bin/babel-node $NODE_DEBUG_OPTION ./src/server.js",
-    "log": "NODE_ENV=log ./node_modules/.bin/babel-node ./src/app.js",
-    "test": "NODE_ENV=test nyc mocha $NODE_DEBUG_OPTION --require @babel/register ./src/{,**}/*.test.js",
+    "log": "NODE_ENV=log ./node_modules/.bin/babel-node ./src/server.js",
+    "test": "NODE_ENV=test mocha $NODE_DEBUG_OPTION --require @babel/register ./src/{,**}/*.test.js",
+    "coverage": "nyc --reporter html --report-dir ./build/coverage npm test",
     "build": "./node_modules/.bin/babel ./src --out-dir ./build/dist --source-maps"
   },
   "keywords": [

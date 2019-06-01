@@ -15,3 +15,9 @@ mailservice.iml
 
 # build
 build/
+
+# scripts
+scripts
+
+# coverage
+.nyc_output
