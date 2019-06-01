@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import status from 'http-status'
 import request from 'supertest'
-import app from '../app'
+import app from '../config/express'
 import { push } from '../repositories/inMemoryEmailStore'
 
 describe('apiController', () => {
