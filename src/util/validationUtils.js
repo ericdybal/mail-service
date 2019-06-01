@@ -1,17 +1,21 @@
-import httpStatus from 'http-status'
-import { validationResult } from 'express-validator/check'
-import APIError from './APIError'
+import httpStatus from 'http-status';
+import { validationResult } from 'express-validator/check';
+import APIError from './APIError';
 
 export const validateResults = (req, res, next) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    throw new APIError({message: 'validation errors', errors: errors.array(), status: httpStatus.BAD_REQUEST})
+    throw new APIError({
+      message: 'validation errors',
+      errors: errors.array(),
+      status: httpStatus.BAD_REQUEST,
+    });
   } else {
-    return next()
+    return next();
   }
-}
+};
 
-export const validate = (fn) => {
-  const fns = Array.isArray(fn) ? fn : [fn]
-  return [...fns, validateResults]
-}
+export const validate = fn => {
+  const fns = Array.isArray(fn) ? fn : [fn];
+  return [...fns, validateResults];
+};

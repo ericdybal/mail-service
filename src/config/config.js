@@ -1,13 +1,13 @@
-import convict from 'convict'
-import path from 'path'
-import appRoot from 'app-root-path'
+import convict from 'convict';
+import path from 'path';
+import appRoot from 'app-root-path';
 
 const config = convict({
   env: {
     doc: 'The application environment.',
     format: ['development', 'test', 'production', 'log'],
     default: 'development',
-    env: 'NODE_ENV'
+    env: 'NODE_ENV',
   },
   port: {
     doc: 'The port to bind.',
@@ -26,7 +26,8 @@ const config = convict({
       default: 3,
     },
     deliveryRetryPeriod: {
-      doc: 'The elapsed time after an attempt will be made to deliver a FAILED email.',
+      doc:
+        'The elapsed time after an attempt will be made to deliver a FAILED email.',
       format: 'duration',
       default: '15 mins',
     },
@@ -41,32 +42,34 @@ const config = convict({
       doc: 'The number of queued emails.',
       format: 'int',
       default: 10000,
-    }
+    },
   },
-  emailProvider: [{
-    type: {
-      doc: 'mailProvider type',
-      format: ['primary', 'backup'],
-      default: 'primary'
+  emailProvider: [
+    {
+      type: {
+        doc: 'mailProvider type',
+        format: ['primary', 'backup'],
+        default: 'primary',
+      },
+      name: {
+        doc: 'mailProvider name',
+        format: String,
+        default: '',
+      },
+      apiKey: {
+        doc: 'Api Key',
+        format: String,
+        default: '',
+      },
     },
-    name: {
-      doc: 'mailProvider name',
-      format: String,
-      default: ''
-    },
-    apiKey: {
-      doc: 'Api Key',
-      format: String,
-      default: ''
-    },
-  }],
-})
+  ],
+});
 
 // allow override via command line
-const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'development'
+const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
 
 // load config.json parameters
-config.loadFile(path.join(appRoot.path, './config/' + env + '.json'))
-config.validate({allowed: 'strict'})
+config.loadFile(path.join(appRoot.path, './config/' + env + '.json'));
+config.validate({ allowed: 'strict' });
 
-export default config
+export default config;

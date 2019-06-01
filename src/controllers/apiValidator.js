@@ -1,13 +1,17 @@
-import { param, body } from 'express-validator/check'
+import { param, body } from 'express-validator/check';
 
-const splitter = (value = '') => value.split(',')
+const splitter = (value = '') => value.split(',');
 
 export default {
   getMail: [
-    param('id').exists().withMessage('is a required field'),
+    param('id')
+      .exists()
+      .withMessage('is a required field'),
   ],
   sendEmail: [
-    body('from').isEmail().withMessage('must be a valid email address'),
+    body('from')
+      .isEmail()
+      .withMessage('must be a valid email address'),
 
     body('to')
       .customSanitizer(splitter)
@@ -26,4 +30,4 @@ export default {
       .isEmail()
       .withMessage('must be a valid email address'),
   ],
-}
+};

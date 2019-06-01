@@ -1,6 +1,6 @@
-import winston, { format } from 'winston'
-import appRootPath from 'app-root-path'
-import path from 'path'
+import winston, { format } from 'winston';
+import appRootPath from 'app-root-path';
+import path from 'path';
 
 const options = {
   combined: {
@@ -27,18 +27,17 @@ const options = {
     json: false,
     colorize: true,
   },
-}
+};
 
 const logger = winston.createLogger({
   level: 'debug',
   format: format.combine(
     format.prettyPrint(),
-    format.label({label: path.basename(__filename)}),
-    format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
+    format.label({ label: path.basename(__filename) }),
+    format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     format.colorize(),
     format.printf(
-      info =>
-        `${info.timestamp} ${info.level} [${info.label}]: ${info.message}`
+      info => `${info.timestamp} ${info.level} [${info.label}]: ${info.message}`
     )
   ),
   transports: [
@@ -49,19 +48,19 @@ const logger = winston.createLogger({
     new winston.transports.File(options.combined),
     new winston.transports.File(options.error),
   ],
-})
+});
 
 //
 // If we're not in production then log to the `console`
 //
 if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console(options.console))
+  logger.add(new winston.transports.Console(options.console));
 }
 
 logger.stream = {
-  write: (message) => {
-    logger.info(message.trim())
+  write: message => {
+    logger.info(message.trim());
   },
-}
+};
 
-export default logger
+export default logger;

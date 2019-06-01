@@ -1,15 +1,14 @@
-import express from 'express'
-import status from 'http-status'
-import uuid from 'uuid'
-import getEmailStore from '../repositories/emailStoreProvider'
-import { validate } from '../util/validationUtils'
-import validator from './apiValidator'
-import config from '../config/config'
+import express from 'express';
+import status from 'http-status';
+import uuid from 'uuid';
+import getEmailStore from '../repositories/emailStoreProvider';
+import { validate } from '../util/validationUtils';
+import validator from './apiValidator';
+import config from '../config/config';
 
-const router = express.Router()
+const router = express.Router();
 
 router.post('/mail', validate(validator.sendEmail), (req, res, next) => {
-
   const emailEntry = {
     id: uuid(),
     dateCreated: new Date(),
@@ -22,39 +21,45 @@ router.post('/mail', validate(validator.sendEmail), (req, res, next) => {
       cc: req.body.cc,
       bcc: req.body.bcc,
       subject: req.body.subject,
-      text: req.body.text
-    }
-  }
+      text: req.body.text,
+    },
+  };
 
-  getEmailStore().count()
+  getEmailStore()
+    .count()
     .then(count => {
-      const size = config.get('emailStore.size')
+      const size = config.get('emailStore.size');
       if (count >= size) {
-        res.status(status.SERVICE_UNAVAILABLE)
-        res.send(count)
+        res.status(status.SERVICE_UNAVAILABLE);
+        res.send(count);
       }
     })
-    .catch(next)
+    .catch(next);
 
-  getEmailStore().push(emailEntry).then(result => {
-    res.status(status.CREATED)
-    res.setHeader('Location', '/api/mail/' + result.id)
-    res.send(result)
-  }).catch(next)
-})
+  getEmailStore()
+    .push(emailEntry)
+    .then(result => {
+      res.status(status.CREATED);
+      res.setHeader('Location', '/api/mail/' + result.id);
+      res.send(result);
+    })
+    .catch(next);
+});
 
 router.get('/mail/:id', validate(validator.getMail), (req, res, next) => {
-  const id = req.params.id
+  const id = req.params.id;
 
-  getEmailStore().findById(id).then(result => {
-    res.status(result ? status.OK : status.NOT_FOUND)
-      .send(result)
-  }).catch(next)
-})
+  getEmailStore()
+    .findById(id)
+    .then(result => {
+      res.status(result ? status.OK : status.NOT_FOUND).send(result);
+    })
+    .catch(next);
+});
 
 router.get('/', (req, res) => {
-  res.status(status.OK)
-  res.setHeader('Content-Type', 'text/plain')
+  res.status(status.OK);
+  res.setHeader('Content-Type', 'text/plain');
   res.send(`
   
     Simple Mail Service
@@ -121,7 +126,7 @@ router.get('/', (req, res) => {
        
        * See [Send Email]
        
-    `)
-})
+    `);
+});
 
-export default router
+export default router;

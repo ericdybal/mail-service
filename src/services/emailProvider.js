@@ -1,30 +1,30 @@
-import config from '../config/config'
-import * as mailGunEmailProvider from './mailGunEmailProvider'
-import * as sendGridEmailProvider from './sendGridEmailProvider'
-import * as logEmailProvider from './logEmailProvider'
+import config from '../config/config';
+import * as mailGunEmailProvider from './mailGunEmailProvider';
+import * as sendGridEmailProvider from './sendGridEmailProvider';
+import * as logEmailProvider from './logEmailProvider';
 
-export const getPrimaryEmailProvider = () => getEmailProviderByType('primary')
-export const getBackupEmailProvider = () => getEmailProviderByType('backup')
+export const getPrimaryEmailProvider = () => getEmailProviderByType('primary');
+export const getBackupEmailProvider = () => getEmailProviderByType('backup');
 
 const getEmailProviderByType = type => {
   const providerConfig = config._instance.emailProvider.find(item => {
-    return item.type === type
-  })
-  const providerByName = getEmailProviderByName(providerConfig.name)
-  providerByName.init(providerConfig)
+    return item.type === type;
+  });
+  const providerByName = getEmailProviderByName(providerConfig.name);
+  providerByName.init(providerConfig);
 
-  return providerByName
-}
+  return providerByName;
+};
 
-const getEmailProviderByName = (name) => {
+const getEmailProviderByName = name => {
   switch (name) {
     case 'mailGun':
-      return mailGunEmailProvider
+      return mailGunEmailProvider;
     case 'sendGrid':
-      return sendGridEmailProvider
+      return sendGridEmailProvider;
     case 'log':
-      return logEmailProvider
+      return logEmailProvider;
     default:
-      return mailGunEmailProvider
+      return mailGunEmailProvider;
   }
-}
+};

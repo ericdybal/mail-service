@@ -1,49 +1,46 @@
-let queue = []
+let queue = [];
 
-export const push = async (item) => {
-  queue.push(item)
-  return Promise.resolve(item)
-}
+export const push = async item => {
+  queue.push(item);
+  return Promise.resolve(item);
+};
 
-export const findByStatus = async (status) => {
+export const findByStatus = async status => {
   const matches = queue.filter(item => {
-    return item.status === status
-  })
-  return Promise.resolve(matches)
-}
+    return item.status === status;
+  });
+  return Promise.resolve(matches);
+};
 
-export const findById = async (id) => {
+export const findById = async id => {
   const find = queue.find(item => {
-    return item.id === id
-  })
+    return item.id === id;
+  });
   if (find) {
-    return Promise.resolve(find)
+    return Promise.resolve(find);
   } else {
-    return Promise.reject(find)
+    return Promise.reject(find);
   }
-}
+};
 
-export const updateById = async (updated) => {
+export const updateById = async updated => {
   let found = queue.find(item => {
-    return item.id === updated.id
-  })
-  Object.assign(found, updated)
-  Promise.resolve(found)
-}
+    return item.id === updated.id;
+  });
+  Object.assign(found, updated);
+  Promise.resolve(found);
+};
 
-export const clearAll = async (status) => {
+export const clearAll = async status => {
   if (status) {
     queue = queue.filter(item => {
-      return item.status !== status
-    })
+      return item.status !== status;
+    });
   } else {
-    queue = []
+    queue = [];
   }
-}
+};
 
 export const count = async () => {
-  return Promise.resolve(queue.length)
-}
-
-
-
+  return Promise.resolve(queue.length);
+};

@@ -8,7 +8,9 @@
     "dev": "NODE_ENV=development ./node_modules/.bin/babel-node $NODE_DEBUG_OPTION ./src/server.js",
     "log": "NODE_ENV=log ./node_modules/.bin/babel-node ./src/server.js",
     "test": "NODE_ENV=test mocha $NODE_DEBUG_OPTION --require @babel/register ./src/{,**}/*.test.js",
-    "coverage": "nyc --reporter html --report-dir ./build/coverage npm test",
+    "coverage": "./node_modules/.bin/nyc --reporter html --report-dir ./build/coverage npm test",
+    "lint": "./node_modules/.bin/eslint ./src/{,**}/*.js",
+    "format": "prettier-eslint ./src/{,**}/*.{js,json} --write",
     "build": "./node_modules/.bin/babel ./src --out-dir ./build/dist --source-maps"
   },
   "keywords": [
@@ -50,9 +52,12 @@
     "chai": "^4.2.0",
     "eslint": "^4.9.0",
     "eslint-config-airbnb-base": "^12.0.1",
+    "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-mocha": "^5.3.0",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
+    "prettier-eslint-cli": "^4.7.1",
     "sinon": "^7.3.2",
     "supertest": "^4.0.2"
   }

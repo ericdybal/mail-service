@@ -1,18 +1,18 @@
-import config from '../config/config'
-import * as inMemoryEmailStore from './inMemoryEmailStore'
-import * as persistentEmailStore from './persistentEmailStore'
+import config from '../config/config';
+import * as inMemoryEmailStore from './inMemoryEmailStore';
+import * as persistentEmailStore from './persistentEmailStore';
 
 const getEmailStore = () => {
-  const type = config.get('emailStore.type')
+  const type = config.get('emailStore.type');
 
   switch (type) {
     case 'in-memory':
-      return inMemoryEmailStore
+      return inMemoryEmailStore;
     case 'persistent':
-      return persistentEmailStore
+      return persistentEmailStore;
     default:
-      return inMemoryEmailStore
+      return inMemoryEmailStore;
   }
-}
+};
 
-export default getEmailStore
+export default getEmailStore;

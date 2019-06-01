@@ -1,10 +1,10 @@
-import axios from 'axios'
+import axios from 'axios';
 
-let providerConfig
+let providerConfig;
 
-export const init = config => providerConfig = config
+export const init = config => (providerConfig = config);
 
-export const sendEmail = async (message) => {
+export const sendEmail = async message => {
   return axios({
     method: 'post',
     url: `https://api.mailgun.net/v3/sandbox3900691a3a094d2c861f477ec5acd14f.mailgun.org/messages`,
@@ -18,11 +18,7 @@ export const sendEmail = async (message) => {
       cc: message.cc ? message.cc.join(',') : undefined,
       bcc: message.bcc ? message.bcc.join(',') : undefined,
       subject: message.subject,
-      text: message.text
+      text: message.text,
     },
-  })
-}
-
-
-
-
+  });
+};

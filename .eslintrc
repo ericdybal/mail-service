@@ -1,14 +1,15 @@
 {
   "root": true,
-  "extends": "eslint:recommended",
+  "extends": ["prettier", "eslint:recommended"],
   "env": {
-    "browser": true,
-    "jquery": true,
     "node": true,
     "es6": true,
     "amd": true,
     "mocha": true
   },
+  "plugins": [
+    "mocha"
+  ],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 6,
@@ -21,6 +22,8 @@
     "no-console": [0],
     "linebreak-style": ["error", "unix"],
     "no-empty":0,
-    "no-restricted-imports": [0]
+    "no-restricted-imports": [0],
+    "mocha/no-exclusive-tests": "error"
   }
 }
+
