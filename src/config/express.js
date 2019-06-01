@@ -6,7 +6,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import error from '../middlewares/errorHandler';
 import { responseHeaders } from '../middlewares/defaultHeaders';
-import apiController from '../controllers/apiController';
+import router from '../routes/allRoutes';
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.use(cors());
 app.use('/api', responseHeaders());
 
 // routing
-app.use('/api', apiController);
+app.use('/api', router);
 
 // error handling
 app.use(error.converter);

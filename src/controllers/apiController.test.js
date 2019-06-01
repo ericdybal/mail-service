@@ -4,7 +4,7 @@ import request from 'supertest';
 import app from '../config/express';
 import { push, clearAll } from '../repositories/inMemoryEmailStore';
 
-describe('apiController', () => {
+describe('controller', () => {
   const mailEntry = {
     id: '1',
     status: 'PENDING',

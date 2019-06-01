@@ -1,6 +1,5 @@
 import { param, body } from 'express-validator/check';
-
-const splitter = (value = '') => value.split(',');
+import { split } from '../util/generalUtils';
 
 export default {
   getMail: [
@@ -14,19 +13,19 @@ export default {
       .withMessage('must be a valid email address'),
 
     body('to')
-      .customSanitizer(splitter)
+      .customSanitizer(split)
       .isEmail()
       .withMessage('must be a valid email address'),
 
     body('cc')
       .optional()
-      .customSanitizer(splitter)
+      .customSanitizer(split)
       .isEmail()
       .withMessage('must be a valid email address'),
 
     body('bcc')
       .optional()
-      .customSanitizer(splitter)
+      .customSanitizer(split)
       .isEmail()
       .withMessage('must be a valid email address'),
   ],

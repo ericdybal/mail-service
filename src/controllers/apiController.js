@@ -1,62 +1,60 @@
-import express from 'express';
 import status from 'http-status';
 import uuid from 'uuid';
 import getEmailStore from '../repositories/emailStoreProvider';
-import { validate } from '../util/validationUtils';
-import validator from './apiValidator';
 import config from '../config/config';
 
-const router = express.Router();
 
-router.post('/mail', validate(validator.sendEmail), (req, res, next) => {
-  const emailEntry = {
-    id: uuid(),
-    dateCreated: new Date(),
-    dateSent: null,
-    status: 'PENDING',
-    errorCount: 0,
-    message: {
-      from: req.body.from,
-      to: req.body.to,
-      cc: req.body.cc,
-      bcc: req.body.bcc,
-      subject: req.body.subject,
-      text: req.body.text,
-    },
-  };
+export const sendEmail = async (req, res, next) => {
 
-  getEmailStore()
-    .count()
-    .then(count => {
-      const size = config.get('emailStore.size');
-      if (count >= size) {
-        res.sendStatus(status.SERVICE_UNAVAILABLE);
-      } else {
-        getEmailStore()
-          .push(emailEntry)
-          .then(result => {
-            res.status(status.CREATED);
-            res.setHeader('Location', '/api/mail/' + result.id);
-            res.send(result);
-          })
-          .catch(next);
-      }
-    })
-    .catch(next);
-});
+  try {
+    const queueSize = config.get('emailStore.size');
+    const emailCount = await getEmailStore().count();
 
-router.get('/mail/:id', validate(validator.getMail), (req, res, next) => {
-  const id = req.params.id;
+    if (emailCount >= queueSize) {
+      res.sendStatus(status.SERVICE_UNAVAILABLE);
+      res.end();
 
-  getEmailStore()
-    .findById(id)
-    .then(result => {
-      res.status(result ? status.OK : status.NOT_FOUND).send(result);
-    })
-    .catch(next);
-});
+    } else {
+      const emailEntry = {
+        id: uuid(),
+        dateCreated: new Date(),
+        dateSent: null,
+        status: 'PENDING',
+        errorCount: 0,
+        message: {
+          from: req.body.from,
+          to: req.body.to,
+          cc: req.body.cc,
+          bcc: req.body.bcc,
+          subject: req.body.subject,
+          text: req.body.text,
+        },
+      };
 
-router.get('/', (req, res) => {
+      const result = await getEmailStore().push(emailEntry);
+
+      res.status(status.CREATED);
+      res.setHeader('Location', '/api/mail/' + result.id);
+      res.json(result);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getEmail = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const result = await getEmailStore().findById(id);
+
+    res.status(result ? status.OK : status.NOT_FOUND);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const help = (req, res) => {
   res.status(status.OK);
   res.setHeader('Content-Type', 'text/plain');
   res.send(`
@@ -126,6 +124,6 @@ router.get('/', (req, res) => {
        * See [Send Email]
        
     `);
-});
+};
 
-export default router;
+
