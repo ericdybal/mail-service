@@ -3,9 +3,7 @@ import uuid from 'uuid';
 import getEmailStore from '../repositories/emailStoreProvider';
 import config from '../config/config';
 
-
 export const sendEmail = async (req, res, next) => {
-
   try {
     const queueSize = config.get('emailStore.size');
     const emailCount = await getEmailStore().count();
@@ -13,7 +11,6 @@ export const sendEmail = async (req, res, next) => {
     if (emailCount >= queueSize) {
       res.sendStatus(status.SERVICE_UNAVAILABLE);
       res.end();
-
     } else {
       const emailEntry = {
         id: uuid(),
@@ -125,5 +122,3 @@ export const help = (req, res) => {
        
     `);
 };
-
-

@@ -1,5 +1,6 @@
 import { param, body } from 'express-validator/check';
-import { split } from '../util/generalUtils';
+
+const split = (value = '') => value.split(',');
 
 export default {
   getMail: [

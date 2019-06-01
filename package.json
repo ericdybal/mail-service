@@ -7,11 +7,11 @@
     "start": "NODE_ENV=production pm2 start ./build/dist/app.js -i 1 --name simple-mail-service",
     "dev": "NODE_ENV=development nodemon --exec ./node_modules/.bin/babel-node $NODE_DEBUG_OPTION ./src/server.js",
     "log": "NODE_ENV=log ./node_modules/.bin/babel-node ./src/server.js",
-    "test": "NODE_ENV=test mocha $NODE_DEBUG_OPTION --require @babel/register ./src/{,**}/*.test.js",
+    "test": "NODE_ENV=test mocha $NODE_DEBUG_OPTION --require @babel/register ./src/{,test/**,**}/*.test.js",
     "test:watch": "NODE_ENV=test mocha $NODE_DEBUG_OPTION --require @babel/register --watch --watch-extensions ./src/{,**}/*.test.js",
     "coverage": "./node_modules/.bin/nyc --reporter html --report-dir ./build/coverage npm test",
-    "lint": "./node_modules/.bin/eslint ./src/{,**}/*.js",
-    "format": "prettier-eslint ./src/{,**}/*.{js,json} --write",
+    "lint": "./node_modules/.bin/eslint ./src/{,test/**,**}/*.js",
+    "format": "prettier-eslint ./src/{,test/**,**}/*.{js,json} --write",
     "build": "./node_modules/.bin/babel ./src --out-dir ./build/dist --source-maps"
   },
   "keywords": [

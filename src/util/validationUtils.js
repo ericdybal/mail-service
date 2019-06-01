@@ -19,4 +19,3 @@ export const validateResults = (req, res, next) => {
     return next();
   }
 };
-

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import status from 'http-status';
 import request from 'supertest';
-import app from '../config/express';
-import { push, clearAll } from '../repositories/inMemoryEmailStore';
+import app from '../../config/express';
+import { push, clearAll } from '../../repositories/inMemoryEmailStore';
 
 describe('controller', () => {
   const mailEntry = {
@@ -121,8 +121,7 @@ describe('controller', () => {
         .set('Accept', 'application/json')
         .expect('Content-Type', /text\/plain/)
         .expect(status.SERVICE_UNAVAILABLE)
-        .then(() => {
-        });
+        .then(() => {});
     });
   });
 });
