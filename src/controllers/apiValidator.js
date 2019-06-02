@@ -1,6 +1,6 @@
 import { param, body } from 'express-validator/check';
 import * as Validator from 'validator';
-import { splitSanitizer, itemValidator, itemMessage } from '../util/validationUtils';
+import { convertToArraySanitizer, arrayItemValidator, arrayItemMessage } from '../util/validationUtils';
 
 export default {
   getMail: [
@@ -14,20 +14,20 @@ export default {
       .withMessage('must be a valid email address'),
 
     body('to')
-      .customSanitizer(splitSanitizer())
-      .custom(itemValidator(Validator.isEmail))
-      .withMessage(itemMessage('must be a valid email address')),
+      .customSanitizer(convertToArraySanitizer())
+      .custom(arrayItemValidator(Validator.isEmail))
+      .withMessage(arrayItemMessage('must be a valid email address')),
 
     body('cc')
       .optional()
-      .customSanitizer(splitSanitizer())
-      .custom(itemValidator(Validator.isEmail))
-      .withMessage(itemMessage('must be a valid email address')),
+      .customSanitizer(convertToArraySanitizer())
+      .custom(arrayItemValidator(Validator.isEmail))
+      .withMessage(arrayItemMessage('must be a valid email address')),
 
     body('bcc')
       .optional()
-      .customSanitizer(splitSanitizer())
-      .custom(itemValidator(Validator.isEmail))
-      .withMessage(itemMessage('must be a valid email address')),
+      .customSanitizer(convertToArraySanitizer())
+      .custom(arrayItemValidator(Validator.isEmail))
+      .withMessage(arrayItemMessage('must be a valid email address')),
   ],
 };

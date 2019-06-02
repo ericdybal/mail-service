@@ -85,7 +85,7 @@ describe('controller', () => {
           errors: [
             {
               location: 'body',
-              msg: 'Every element must be a valid email address',
+              msg: 'must be a valid email address [not_an_email_address,not_an_email_address2]',
               param: 'to',
               value: 'guest@example.com,not_an_email_address,not_an_email_address2',
             },

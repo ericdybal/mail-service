@@ -8,7 +8,16 @@ export const validate = fn => {
 };
 
 export const validateResults = (req, res, next) => {
-  const errors = validationResult(req);
+  const errorFormatter = ({ location, msg, param, value }) => {
+    return {
+      'msg': msg,
+      'param': param,
+      'value': value,
+      'location': location,
+    };
+  };
+
+  const errors = validationResult(req).formatWith(errorFormatter);
   if (!errors.isEmpty()) {
     throw new APIError({
       message: 'Validation errors',
@@ -21,33 +30,40 @@ export const validateResults = (req, res, next) => {
 };
 
 //
-// Custom sanitizers
+// Converts delimiter separated string to an array e.g "item1,item2,item3 => [item1,item2,item3]"
 //
-export const splitSanitizer = (delimiter = ',') => {
+export const convertToArraySanitizer = (delimiter = ',') => {
   return function(value = '') {
     return value.split(delimiter);
   };
 };
 
 //
-// Custom validators
+// Validates elements of the passed in array. Stores the results of the validation in the
+// res[location.path].failed array.
 //
-export const itemValidator = (validatorFn) => {
-  return function(values = []) {
-    values.forEach(value => {
-      if (!validatorFn(value)) {
-        throw new Error(`${value} is not a valid email address`);
+export const arrayItemValidator = (validatorFn) => {
+  return function(values = [], { req, location, path }) {
+    const failed = [];
+
+    const array = Array.isArray(values) ? values : [values];
+    array.forEach(item => {
+      if (!validatorFn(item)) {
+        failed.push(item);
       }
     });
-    return true;
+
+    req[location][path].failed = failed;
+    return failed.length === 0;
   };
 };
 
 //
-// Dynamic messages
+// Builds a custom error message.
 //
-export const itemMessage = (message) => {
+export const arrayItemMessage = (message) => {
   return function(value, { req, location, path }) {
-    return req[location][path].length > 0 ? `Every element ${message}` : message;
+    const invalid = req[location][path].failed || [];
+    return `${message} [${invalid.join(',')}]`;
   };
 };
