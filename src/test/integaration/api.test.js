@@ -47,7 +47,7 @@ describe('controller', () => {
       .post('/api/mail')
       .send({
         from: 'guest@example.com',
-        to: 'test1@example.com,test2@example.com,wrong_email_address',
+        to: 'test1@example.com,test2@example.com',
         cc: 'cc@example.com',
         bcc: 'bcc@example.com',
       })
@@ -65,7 +65,6 @@ describe('controller', () => {
         expect(res.body.message.to).to.eql([
           'test1@example.com',
           'test2@example.com',
-          'wrong_email_address',
         ]);
         expect(res.body.message.cc).to.eql(['cc@example.com']);
         expect(res.body.message.bcc).to.eql(['bcc@example.com']);
@@ -75,25 +74,20 @@ describe('controller', () => {
   it('should fail with the validation error', () => {
     return request(app)
       .post('/api/mail')
-      .send({ from: 'not_an_email_address,not_an_email_address2' })
+      .send({ from: 'from@example.com', to: 'guest@example.com,not_an_email_address,not_an_email_address2' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(status.BAD_REQUEST)
       .then(res => {
         expect(res.body).to.eql({
           code: 400,
-          message: 'validation errors',
+          message: 'Validation errors',
           errors: [
             {
               location: 'body',
-              msg: 'must be a valid email address',
-              param: 'from',
-              value: 'not_an_email_address,not_an_email_address2',
-            },
-            {
-              location: 'body',
-              msg: 'must be a valid email address',
+              msg: 'Every element must be a valid email address',
               param: 'to',
+              value: 'guest@example.com,not_an_email_address,not_an_email_address2',
             },
           ],
         });

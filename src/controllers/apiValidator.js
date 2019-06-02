@@ -1,6 +1,6 @@
 import { param, body } from 'express-validator/check';
-
-const split = (value = '') => value.split(',');
+import * as Validator from 'validator';
+import { splitSanitizer, itemValidator, itemMessage } from '../util/validationUtils';
 
 export default {
   getMail: [
@@ -14,20 +14,20 @@ export default {
       .withMessage('must be a valid email address'),
 
     body('to')
-      .customSanitizer(split)
-      .isEmail()
-      .withMessage('must be a valid email address'),
+      .customSanitizer(splitSanitizer())
+      .custom(itemValidator(Validator.isEmail))
+      .withMessage(itemMessage('must be a valid email address')),
 
     body('cc')
       .optional()
-      .customSanitizer(split)
-      .isEmail()
-      .withMessage('must be a valid email address'),
+      .customSanitizer(splitSanitizer())
+      .custom(itemValidator(Validator.isEmail))
+      .withMessage(itemMessage('must be a valid email address')),
 
     body('bcc')
       .optional()
-      .customSanitizer(split)
-      .isEmail()
-      .withMessage('must be a valid email address'),
+      .customSanitizer(splitSanitizer())
+      .custom(itemValidator(Validator.isEmail))
+      .withMessage(itemMessage('must be a valid email address')),
   ],
 };
