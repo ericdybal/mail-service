@@ -38,7 +38,10 @@ describe('controller', () => {
       .expect('Content-Type', /json/)
       .expect(status.NOT_FOUND)
       .then(res => {
-        expect(res.body).to.eql({ code: 404, message: 'Not found' });
+        expect(res.body).to.eql({
+          code: 404,
+          message: 'Email message with ID [99999] not found',
+        });
       });
   });
 
@@ -74,7 +77,10 @@ describe('controller', () => {
   it('should fail with the validation error', () => {
     return request(app)
       .post('/api/mail')
-      .send({ from: 'from@example.com', to: 'guest@example.com,not_an_email_address,not_an_email_address2' })
+      .send({
+        from: 'from@example.com',
+        to: 'guest@example.com,not_an_email_address,not_an_email_address2',
+      })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(status.BAD_REQUEST)
@@ -85,9 +91,11 @@ describe('controller', () => {
           errors: [
             {
               location: 'body',
-              msg: 'must be a valid email address [not_an_email_address,not_an_email_address2]',
+              msg:
+                'must be a valid email address [not_an_email_address,not_an_email_address2]',
               param: 'to',
-              value: 'guest@example.com,not_an_email_address,not_an_email_address2',
+              value:
+                'guest@example.com,not_an_email_address,not_an_email_address2',
             },
           ],
         });

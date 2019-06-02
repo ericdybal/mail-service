@@ -19,7 +19,7 @@ export const findById = async id => {
   if (find) {
     return Promise.resolve(find);
   } else {
-    return Promise.reject(find);
+    return Promise.reject(new Error(`Email message with ID [${id}] not found`));
   }
 };
 

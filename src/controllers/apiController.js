@@ -2,6 +2,7 @@ import status from 'http-status';
 import uuid from 'uuid';
 import getEmailStore from '../repositories/emailStoreProvider';
 import config from '../config/config';
+import Error from '../config/error';
 
 export const sendEmail = async (req, res, next) => {
   try {
@@ -44,10 +45,16 @@ export const getEmail = async (req, res, next) => {
     const id = req.params.id;
     const result = await getEmailStore().findById(id);
 
-    res.status(result ? status.OK : status.NOT_FOUND);
+    res.status(status.OK);
     res.json(result);
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(
+      new Error({
+        message: `Email message with ID [${req.params.id}] not found`,
+        stack: err.stack,
+        status: status.NOT_FOUND,
+      })
+    );
   }
 };
 

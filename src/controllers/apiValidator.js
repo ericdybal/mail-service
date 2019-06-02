@@ -1,6 +1,10 @@
 import { param, body } from 'express-validator/check';
 import * as Validator from 'validator';
-import { convertToArraySanitizer, arrayItemValidator, arrayItemMessage } from '../util/validationUtils';
+import {
+  convertToArraySanitizer,
+  arrayItemValidator,
+  arrayItemMessage,
+} from '../util/validationUtils';
 
 export default {
   getMail: [

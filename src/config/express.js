@@ -4,7 +4,7 @@ import compress from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
-import error from '../middlewares/errorHandler';
+import errorHandler from '../middlewares/errorHandler';
 import router from '../routes/allRoutes';
 
 const app = express();
@@ -23,8 +23,6 @@ app.use(cors());
 app.use('/api', router);
 
 // error handling
-app.use(error.converter);
-app.use(error.notFound);
-app.use(error.handler);
+app.use(errorHandler);
 
 export default app;
