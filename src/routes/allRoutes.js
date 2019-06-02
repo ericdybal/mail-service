@@ -6,7 +6,9 @@ import { catchErrors } from '../util/expressUtils';
 
 const router = express.Router();
 
-router.route('/').get(controller.help);
+router.route('/').get((req, res) => {
+  res.redirect('/api-docs');
+});
 router
   .route('/mail/:id')
   .get(validate(validator.getMail), catchErrors(controller.getEmail));

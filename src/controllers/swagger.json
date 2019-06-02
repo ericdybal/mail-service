@@ -1,0 +1,223 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Simple Mail Service API",
+    "description": "A simple web service for sending emails.",
+    "version": "1.0.0"
+  },
+  "host": "hambox.com.au",
+  "basePath": "/simple-mail-service",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/mail": {
+      "post": {
+        "summary": "Submits email for delivery.",
+        "description": "Optional extended description in Markdown.",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "formData",
+            "required": true,
+            "description": "Email sender.",
+            "type": "string"
+          },
+          {
+            "name": "to",
+            "in": "formData",
+            "required": true,
+            "description": "email recipients (comma separated).",
+            "type": "string"
+          },
+          {
+            "name": "cc",
+            "in": "formData",
+            "required": false,
+            "description": "Cc recipients (comma separated).",
+            "type": "string"
+          },
+          {
+            "name": "bcc",
+            "in": "formData",
+            "required": false,
+            "description": "Bcc email recipients (comma separated).",
+            "type": "string"
+          },
+          {
+            "name": "subject",
+            "in": "formData",
+            "required": true,
+            "description": "Email subject.",
+            "type": "string"
+          },
+          {
+            "name": "text",
+            "in": "formData",
+            "required": false,
+            "description": "Email content.",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "dateCreated": {
+                  "type": "string"
+                },
+                "dateSent": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "errorCount": {
+                  "type": "integer"
+                },
+                "message": {
+                  "type": "object",
+                  "properties": {
+                    "from": {
+                      "type": "string"
+                    },
+                    "to": {
+                      "type": "string"
+                    },
+                    "cc": {
+                      "type": "string"
+                    },
+                    "bcc": {
+                      "type": "string"
+                    },
+                    "subject": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "properties": {
+                "code": {
+                  "type": "number"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string"
+                    },
+                    "param": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "location": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mail/{id}": {
+      "get": {
+        "summary": "Returns email delivery status.",
+        "description": "Optional extended description in Markdown.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Email unique identifier.",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "dateCreated": {
+                  "type": "string"
+                },
+                "dateSent": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "errorCount": {
+                  "type": "integer"
+                },
+                "message": {
+                  "type": "object",
+                  "properties": {
+                    "from": {
+                      "type": "string"
+                    },
+                    "to": {
+                      "type": "string"
+                    },
+                    "cc": {
+                      "type": "string"
+                    },
+                    "bcc": {
+                      "type": "string"
+                    },
+                    "subject": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "properties": {
+                "code": {
+                  "type": "number"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

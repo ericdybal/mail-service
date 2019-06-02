@@ -3,8 +3,16 @@ import Error from '../config/error';
 import config from '../config/config';
 import logger from '../config/logger';
 
+export const notFound = (req, res, next) => {
+  const err = new Error({
+    message: 'Not found',
+    status: httpStatus.NOT_FOUND,
+  });
+  return errorHandler(err, req, res);
+};
+
 /* eslint-disable */
-const errorHandler = (err, req, res, next) => {
+export const errorHandler = (err, req, res, next) => {
   let convertedError = err;
 
   if (!(err instanceof Error)) {

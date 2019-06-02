@@ -4,8 +4,10 @@ import compress from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
-import errorHandler from '../middlewares/errorHandler';
+import errorHandler, { notFound } from '../middlewares/errorHandler';
 import router from '../routes/allRoutes';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../controllers/swagger.json';
 
 const app = express();
 
@@ -20,9 +22,11 @@ app.use(helmet());
 app.use(cors());
 
 // routing
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api', router);
 
 // error handling
+app.use(notFound);
 app.use(errorHandler);
 
 export default app;
