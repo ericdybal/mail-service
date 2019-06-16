@@ -19,11 +19,13 @@ export const validateResults = (req, res, next) => {
 
   const errors = validationResult(req).formatWith(errorFormatter);
   if (!errors.isEmpty()) {
-    return next(new Error({
-      message: 'Validation errors',
-      errors: errors.array(),
-      status: httpStatus.BAD_REQUEST,
-    }));
+    return next(
+      new Error({
+        message: 'Validation errors',
+        errors: errors.array(),
+        status: httpStatus.BAD_REQUEST,
+      })
+    );
   } else {
     return next();
   }

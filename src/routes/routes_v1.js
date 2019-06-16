@@ -7,13 +7,11 @@ import { catchErrors } from '../util/expressUtils';
 const router = express.Router();
 
 router.route('/').get((req, res) => {
-  res.redirect('/api-docs');
+  res.writeHead(301, { Location: `/api/api-docs` });
+  res.end();
 });
-router
-  .route('/mail/:id')
-  .get(validate(validator.getMail), catchErrors(controller.getEmail));
-router
-  .route('/mail')
-  .post(validate(validator.sendEmail), catchErrors(controller.sendEmail));
+
+router.post('/mail', validate(validator.sendEmail), catchErrors(controller.sendEmail));
+router.get('/mail/:id', validate(validator.getMail), catchErrors(controller.getEmail));
 
 export default router;

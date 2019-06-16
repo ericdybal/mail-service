@@ -5,7 +5,8 @@ import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 import errorHandler, { notFound } from '../middlewares/errorHandler';
-import router from '../routes/allRoutes';
+import router_v1 from '../routes/routes_v1';
+import router_v2 from '../routes/routes_v2';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../controllers/swagger.json';
 
@@ -22,8 +23,10 @@ app.use(helmet());
 app.use(cors());
 
 // routing
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use('/api', router);
+app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api', router_v1);
+app.use('/api/v1', router_v1);
+app.use('/api/v2', router_v2);
 
 // error handling
 app.use(notFound);

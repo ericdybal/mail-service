@@ -31,6 +31,18 @@ describe('controller', () => {
       });
   });
 
+  it('should return V2 of the email delivery status API', () => {
+    return request(app)
+      .get('/api/v2/mail/1')
+      .set('Accept', 'application/json')
+      .set('Accept-Version', '^2.0.0')
+      .expect('Content-Type', /application\/json/)
+      .expect(status.OK)
+      .then(res => {
+        expect(res.body).to.eql({message: 'API V2 !'});
+      });
+  });
+
   it('should return email not found', () => {
     return request(app)
       .get('/api/mail/99999')

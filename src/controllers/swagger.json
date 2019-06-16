@@ -7,9 +7,7 @@
   },
   "host": "hambox.com.au",
   "basePath": "/simple-mail-service",
-  "schemes": [
-    "https"
-  ],
+  "schemes": ["https"],
   "paths": {
     "/mail": {
       "post": {
@@ -59,9 +57,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "Created",
@@ -154,9 +150,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
